@@ -24,6 +24,16 @@ class Token{
 class Lexer{
     public static function LexCode(code: String){
         var i: Int = 0;
+        var reserved: Array<String> = [
+            "-",
+            "+",
+            "(",
+            ")",
+            "\\",
+            "\"",
+            " ",
+            "0","1","2","3","4","5","6","7","8","9"
+        ];
         var tokens: List<Token> = new List<Token>();
         while (i < code.length){ // Loop through all characters
             if (code.charAt(i) == "("){
@@ -84,6 +94,15 @@ class Lexer{
                 }
                 i = p-1;
                 tokens.add(new Token(Tokens.STRING, sb));
+            }
+            else{
+                var sb: String="";
+                while (!reserved.contains(code.charAt(i))){
+                    sb+=code.charAt(i);
+                    i++;
+                }
+                tokens.add(new Token(Tokens.ITEM,sb));
+                i-=1;
             }
             i++;
         }

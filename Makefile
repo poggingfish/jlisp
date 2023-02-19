@@ -1,8 +1,12 @@
 BUILD_FILE=build.hxml
 
 build :
-	haxe $(BUILD_FILE) > /dev/null
-install : build
-	sudo cp bin/cpp/Main /usr/bin/jlisp
-run : build
-	bin/cpp/Main
+	haxe $(BUILD_FILE)
+build_root : build
+	cp bin/cpp/Main jlisp
+install : build_root
+	sudo cp jlisp /usr/bin/jlisp
+clean :
+	rm -rf bin
+	rm -f jlisp
+.PHONY : clean

@@ -1,3 +1,4 @@
 --main Main
+--cwd src
 --each
---cpp bin/cpp
+--cpp ../bin/cpp

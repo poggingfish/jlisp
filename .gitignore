@@ -1,2 +1,4 @@
 bin
 jlisp
+build_artifacts
+out.pnet

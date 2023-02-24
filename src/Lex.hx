@@ -2,17 +2,19 @@ import haxe.ds.Option;
 enum Tokens{
     LBRACKET; // (
     RBRACKET; // )
+    LCURL; // {
+    RCURL; // }
     SPACE; // " "
-    NL;
+    NL; // \n
     PLUS; // +
     MINUS; // -
     EQUALS; // =
+    SEMICOLON; // ;
     INT;
-
     STRING; // "*"
     NAME; // *
-
-    FUNC;
+    CALL; // Call
+    FUNC; // Function
 }
 class Token{
     public var token: Tokens; // Token
@@ -32,6 +34,9 @@ class Lexer{
             "+",
             "(",
             ")",
+            ";",
+            "{",
+            "}",
             "\\",
             "\"",
             " ",
@@ -39,22 +44,28 @@ class Lexer{
             "\n",
             "0","1","2","3","4","5","6","7","8","9"
         ]; // List of all reserved words
-        var tokens: List<Token> = new List<Token>();
+        var tokens: Array<Token> = new Array<Token>();
         while (i < code.length){ // Loop through all characters
             if (code.charAt(i) == "("){
-                tokens.add(new Token(Tokens.LBRACKET));
+                tokens.push(new Token(Tokens.LBRACKET));
             }
             else if (code.charAt(i) == ")"){
-                tokens.add(new Token(Tokens.RBRACKET));
+                tokens.push(new Token(Tokens.RBRACKET));
+            }
+            else if (code.charAt(i) == "{"){
+                tokens.push(new Token(Tokens.LCURL));
+            }
+            else if (code.charAt(i) == "}"){
+                tokens.push(new Token(Tokens.RCURL));
             }
             else if (code.charAt(i) == " "){
-                tokens.add(new Token(Tokens.SPACE));
+                tokens.push(new Token(Tokens.SPACE));
             }
             else if (code.charAt(i) == "+"){
-                tokens.add(new Token(Tokens.PLUS));
+                tokens.push(new Token(Tokens.PLUS));
             }
             else if (code.charAt(i) == "-" && Std.parseInt(code.charAt(i+1)) == null){ // Checking that "-" is not the start of a negative number
-                tokens.add(new Token(Tokens.MINUS));
+                tokens.push(new Token(Tokens.MINUS));
             }
             else if (Std.parseInt(code.charAt(i)) != null || code.charAt(i) == "-"){
                 var p: Int = 0;
@@ -72,7 +83,8 @@ class Lexer{
                     p++;
                 }
                 i = p-1;
-                tokens.add(new Token(Tokens.INT,Std.parseInt(ib)));
+                var t = Std.parseInt(ib);
+                tokens.push(new Token(Tokens.INT,t));
             }
             else if (code.charAt(i) == "\""){
                 var p: Int = i+1;
@@ -98,13 +110,16 @@ class Lexer{
                     }
                 }
                 i = p-1;
-                tokens.add(new Token(Tokens.STRING, sb));
+                tokens.push(new Token(Tokens.STRING, sb));
             }
             else if (code.charAt(i) == "="){
-                tokens.add(new Token(Tokens.EQUALS));
+                tokens.push(new Token(Tokens.EQUALS));
+            }
+            else if (code.charAt(i) == ";"){
+                tokens.push(new Token(Tokens.SEMICOLON));
             }
             else if (code.charAt(i) == "\n"){
-                tokens.add(new Token(Tokens.NL));
+                tokens.push(new Token(Tokens.NL));
             }
             else{
                 var sb: String="";
@@ -113,8 +128,9 @@ class Lexer{
                     i++;
                 }
                 switch(sb){
-                    case "func": tokens.add(new Token(Tokens.FUNC));
-                    default: tokens.add(new Token(Tokens.NAME,sb));
+                    case "function": tokens.push(new Token(Tokens.FUNC));
+                    case "call": tokens.push(new Token(Tokens.CALL));
+                    default: tokens.push(new Token(Tokens.NAME,sb));
                 }
                 i-=1;
             }

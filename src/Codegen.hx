@@ -1,6 +1,7 @@
 using Node.Node;
 using Expr.Expr;
 using Todo.Todo;
+using haxe.ds.Option;
 class Codegen{
     var funcs: Map<String,String> = new Map<String,String>();
     var func_ptr = 0;
@@ -10,47 +11,45 @@ class Codegen{
         funcs.set(name,_name);
         return _name;
     }
-    function CreateFunc(name: String){
-        Sys.println(':$name');
-    }
-    function EndFunc(){
-        Sys.println('ret');
-    }
-    function PushStackInt(int: Int){
-        
+    public function ToArray(f: List<Node>){
+        var t: Array<Node> = new Array<Node>();
+        for (i in f){
+            t.push(i);
+        }
+        return t;
     }
     public function Codegen(node: Dynamic, ?Init: Bool){
         switch Type.getClass(node){
-            case Node.FunctionNode:
-                var node: Node.FunctionNode = node;
-                var name = NextFunc(node.name);
-                CreateFunc(name);
+            case Node.Node:
+                var node: Node.Node = node;
                 for (i in node.children){
                     Codegen(i);
                 }
-                EndFunc();
-            case Node.IntNode:
-                var node: Node.IntNode = node;
-                Sys.println("push #"+node.int);
+            case Node.FunctionNode:
+                var node: Node.FunctionNode = node;
+                var name = NextFunc(node.name);
+                Sys.println(name + " = function(){");
+                for (i in node.children){
+                    Codegen(i);
+                }
+                Sys.println("}");
+            case Node.FunctionCallNode:
+                var node: Node.FunctionCallNode = node;
+                Sys.println(funcs[node.name] + "();");
             case Node.ExprNode:
                 var node: Node.ExprNode = node;
-                if (node.expr == ADD){
-                    var p: Int = 0;
-                    for (i in node.children){
-                        Codegen(i);
-                        p+=1;
-                    }
-                    Sys.println("add");
-                    for (i in 0...p-2){
-                        Sys.println("add");
-                    }
+                switch(node.expr){
+                    case EQ:
+                        var t = ToArray(node.children);
+                        var name: String = (cast t[0]).name;
+                        var int: Node.IntNode = cast t[1];
+                        Sys.println(name + ' = ${int.int};');
+                    default: Todo.todo("Implement parse expr for type: " + node.expr);
                 }
-            default:
-                Todo.todo("Implement codegen for type " + Type.typeof(node));
+            default: Todo.todo("Implement parse for type: " + Type.getClass(node));
         }
         if (Init){
-            Sys.println(":main");
-            Sys.println("jump :" + funcs.get("Main"));
+            Sys.println(funcs["Main"] + "();");
         }
     }
 }

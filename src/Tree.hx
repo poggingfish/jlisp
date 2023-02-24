@@ -1,22 +1,23 @@
 using Lex.Token;
 using Lex.Tokens;
-using Todo.Todo;
-using Node.Node;
-using Unwrap.Unwrap;
-using Expr.Expr;
 class Tree{
-    public static function ToList(V: Array<Node>){
-        var out: List<Node> = new List<Node>();
-        for (i in V){
-            out.push(i);
+    var i = 0;
+    public function new(){}
+    public function Treeify(T: Array<Token>){
+        var finished: Array<Any> = new Array<Any>();
+        while (i < T.length){
+            switch (T[i].token){
+                case LCURL:
+                    i+=1;
+                    finished.push(Treeify(T));
+                case RCURL:
+                    return finished;
+                case SPACE:
+                default:
+                    finished.push(T[i]);
+            }
+            i++;
         }
-    }
-    public static function Treeify(tokens: List<Token>){
-        var AST = new Node.FunctionNode("Main");
-        var p = new Node.ExprNode(Expr.ADD);
-        p.children.add(new Node.IntNode(5));
-        p.children.add(new Node.IntNode(5));
-        AST.children.add(p);
-        return AST;
+        return finished;
     }
 }

@@ -1,1 +1,9 @@
-(+ 1 2)
+function Bruh{
+    x = 4
+}
+function Main{
+    x = 1
+    x = 2
+    call Bruh
+    x = 3
+}

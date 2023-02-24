@@ -1,6 +1,7 @@
 using Expr.Expr;
 class Node{
     public var children: List<Node>;
+    public var line = 0;
     public function new(?children: List<Node>){
         this.children = new List<Node>();
         if (children != null){
@@ -30,6 +31,20 @@ class ExprNode extends Node{
     }
 }
 class FunctionNode extends Node{
+    public var name: String = "";
+    public function new(name: String, ?children: List<Node>){
+        super(children);
+        this.name=name;
+    }
+}
+class FunctionCallNode extends Node{
+    public var name: String = "";
+    public function new(name: String, ?children: List<Node>){
+        super(children);
+        this.name=name;
+    }
+}
+class NameNode extends Node{
     public var name: String = "";
     public function new(name: String, ?children: List<Node>){
         super(children);

@@ -4,6 +4,7 @@ using sys.io.FileInput;
 using Lex.Lexer;
 using Tree.Tree;
 using Codegen.Codegen;
+using Parse.Parse;
 class Main {
     static function usage(){
         Sys.println("Usage: jlisp <file>");
@@ -25,7 +26,9 @@ class Main {
         }
         var f = t.readAll(1);
         var code = f.toString();
-        var codegen: Codegen.Codegen = new Codegen.Codegen();
-        codegen.Codegen(Tree.Treeify(Lexer.LexCode(code)), true);
+        var parse = new Parse();
+        var tree = new Tree();
+        var codegen = new Codegen();
+        codegen.Codegen(parse.Parse(tree.Treeify(Lexer.LexCode(code))), true);
     }
 }

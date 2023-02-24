@@ -46,6 +46,9 @@ class Codegen{
                         Sys.println(name + ' = ${int.int};');
                     default: Todo.todo("Implement parse expr for type: " + node.expr);
                 }
+            case Node.InlineNode:
+                var node: Node.InlineNode = node;
+                Sys.println(node.code);
             default: Todo.todo("Implement parse for type: " + Type.getClass(node));
         }
         if (Init){

@@ -51,3 +51,10 @@ class NameNode extends Node{
         this.name=name;
     }
 }
+class InlineNode extends Node{
+    public var code: String = "";
+    public function new(code: String, ?children: List<Node>){
+        super(children);
+        this.code=code;
+    }
+}

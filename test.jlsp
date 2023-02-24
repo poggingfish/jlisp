@@ -1,9 +1,6 @@
 function Bruh{
-    x = 4
+    inline "$print(\"Hello, world!\\n\");"
 }
 function Main{
-    x = 1
-    x = 2
     call Bruh
-    x = 3
 }

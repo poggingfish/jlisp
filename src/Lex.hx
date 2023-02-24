@@ -15,6 +15,7 @@ enum Tokens{
     NAME; // *
     CALL; // Call
     FUNC; // Function
+    INLINE; // Inline code
 }
 class Token{
     public var token: Tokens; // Token
@@ -92,13 +93,17 @@ class Lexer{
                 var reading: Bool = true;
                 while (reading){
                     if (code.charAt(p) == "\\"){
-                        if (code.charAt(++p) == "n"){
-                            sb += "\n";
-                            p++;
+                        p++;
+                        if (code.charAt(p) == "\\"){
+                            sb += "\\";
                         }
-                        else if (code.charAt(p++) == "\""){
+                        else if (code.charAt(p) == "n"){
+                            sb += "\n";
+                        }
+                        else if (code.charAt(p) == "\""){
                             sb += "\"";
                         }
+                        p++;
                     }
                     else if (code.charAt(p) == "\""){
                         reading = false;
@@ -130,6 +135,7 @@ class Lexer{
                 switch(sb){
                     case "function": tokens.push(new Token(Tokens.FUNC));
                     case "call": tokens.push(new Token(Tokens.CALL));
+                    case "inline": tokens.push(new Token(Tokens.INLINE));
                     default: tokens.push(new Token(Tokens.NAME,sb));
                 }
                 i-=1;

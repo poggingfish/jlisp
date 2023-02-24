@@ -46,8 +46,13 @@ class Parse{
                 else if (token.token == Tokens.NL){
                     line++;
                 }
-                else if (token.token == Tokens.SEMICOLON){
-
+                else if (token.token == Tokens.SEMICOLON){}
+                else if (token.token == Tokens.INLINE){
+                    var next_tok: Token = cast tokens[++i];
+                    if (next_tok.token == Tokens.STRING){
+                        var code: String = cast Unwrap.unwrap(next_tok.item);
+                        base.children.add(new Node.InlineNode(code));
+                    }
                 }
                 else{
                     Todo.todo("Implement parse for token " + token.token);

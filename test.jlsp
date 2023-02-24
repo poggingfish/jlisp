@@ -1,6 +1,6 @@
-function Bruh{
+function print{
     inline "$print(\"Hello, world!\\n\");"
 }
 function Main{
-    call Bruh
+    call print
 }

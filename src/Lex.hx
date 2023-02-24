@@ -10,6 +10,7 @@ enum Tokens{
     MINUS; // -
     EQUALS; // =
     SEMICOLON; // ;
+    COMMA; // ,
     INT;
     STRING; // "*"
     NAME; // *
@@ -38,6 +39,7 @@ class Lexer{
             ";",
             "{",
             "}",
+            ",",
             "\\",
             "\"",
             " ",
@@ -122,6 +124,9 @@ class Lexer{
             }
             else if (code.charAt(i) == ";"){
                 tokens.push(new Token(Tokens.SEMICOLON));
+            }
+            else if (code.charAt(i) == ","){
+                tokens.push(new Token(Tokens.COMMA));
             }
             else if (code.charAt(i) == "\n"){
                 tokens.push(new Token(Tokens.NL));

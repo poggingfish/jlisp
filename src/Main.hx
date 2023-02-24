@@ -30,5 +30,6 @@ class Main {
         var tree = new Tree();
         var codegen = new Codegen();
         codegen.Codegen(parse.Parse(tree.Treeify(Lexer.LexCode(code))), true);
+        File.saveContent("out.neko",codegen.out_string);
     }
 }

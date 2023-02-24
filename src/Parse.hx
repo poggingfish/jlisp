@@ -5,14 +5,13 @@ class Parse{
     public function new(){}
     var line = 0;
     var recurse = 0;
+    var def_array:Array<Any> = new Array<Any>();
     public function Parse(tokens: Array<Any>){
         var base: Node.Node = new Node.Node();
         var i = 0;
-        var _recurse = recurse;
         recurse++;
         while (i < tokens.length){
-            var _:Array<Any> = new Array<Any>();
-            if (Type.typeof(tokens[i]) == Type.typeof(_)){
+            if (Type.typeof(tokens[i]) == Type.typeof(def_array)){
                 Parse(tokens[i]);
             }
             else{
